@@ -1,0 +1,77 @@
+﻿
+@page "/fileupload"
+@using Plagiarism_C.Service
+@inject IFileUpload fileUpload
+@inject NavigationManager NavigationManager
+
+
+
+
+
+<h1>Checker</h1>
+<h2>Fileupload</h2>
+ <br/>
+<RadzenButton Click=@(args=> OnClick("Orginal! ")) Text="Show Info Alert" Style="width:200px" ButtonStyle="ButtonStyle.Info" />
+<RadzenButton Click=@(args=> OnClick("Warning!")) Text="Show Info Alert" Style="width:200px" ButtonStyle="ButtonStyle.Warning"/>
+<RadzenButton Click=@(args=> OnClick("Cheating!")) Text="Show Info Alert" Style="width:200px" ButtonStyle="ButtonStyle.Danger"/>
+
+
+<br />
+<p>@ButtonName</p>
+<textarea type="text" name="configJson" id="configJson" rows="10" cols="60" maxlength="300"
+          οnchange="this.value=this.value.substring(0, 300)"
+          οnkeydοwn="this.value=this.value.substring(0,300)"
+          οnkeyup="this.value=this.value.substring(0, 300)">
+  @Text
+</textarea>
+
+
+<div class="form-group">
+    <button type="submit" class="btn btn-success">Result</button>
+</div>
+
+<InputFile OnChange="HandleFileSelected"></InputFile>
+
+@if (file != null)
+{
+    <p> Name:@file.Name</p>
+    <p> Size in Bytes: @file.Size</p>
+    <p> File type:@file.Type</p>
+}
+
+<button class="btn btn-primary" @onclick="NavigateToCounterComponent">Contact Us</button>
+
+
+@code {
+    
+    public string ButtonName;
+    void OnClick(string buttonName)
+    {
+
+        ButtonName = buttonName;
+    }
+
+    private void NavigateToCounterComponent()
+    {
+        NavigationManager.NavigateTo("contactus");
+    }
+
+    public string Address { get; set; }
+    void Save()
+    {
+        var textAreaValue = Address;
+    }
+    public string Text { get; set; }
+
+    IFileListEntry file;
+    async Task HandleFileSelected(IFileListEntry[] files)
+    {
+        file = files.FirstOrDefault();
+        if (file != null)
+        {
+            await fileUpload.UploadAsync(file);
+        }
+    }
+
+
+}
