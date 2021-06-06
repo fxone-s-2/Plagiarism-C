@@ -1,5 +1,6 @@
 ﻿@page "/contactus"
 @using Plagiarism_C.Data
+@inject NavigationManager NavigationManager
 
 <h1>Contact Us Form</h1>
 
@@ -7,6 +8,9 @@
     <div class="col-md-4">
         <EditForm Model="@contactus" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInValidSubmit">
             <div class="alert @StatusClass">@StatusMessage</div>
+
+            <FluentValidationValidator />
+            <div class="alert @StatusClass"> @StatusClass</div>
             <DataAnnotationsValidator />
             <ValidationSummary />
 
@@ -25,21 +29,36 @@
             <button type="submit" class="btn btn-success">Submit</button>
 
         </EditForm>
+        <label>@message</label>
     </div>
 </div>
+<br />
+<br />
+
+
+<button class="btn btn-primary" @onclick="NavigateToHomeComponent">Back</button>
 
 @code {
     private string StatusMessage;
     private string StatusClass;
+    string message;
 
-    private Contactus contactus = new Contactus();
+    Contactus contactus = new Contactus();
 
-    protected void HandleValidSubmit()
+    private void NavigateToHomeComponent()
     {
+        NavigationManager.NavigateTo("fileupload");
+    }
+
+
+    void HandleValidSubmit()
+    {
+        message = "Submitted Successfully!!!";
         StatusClass = "alert-info";
         StatusMessage = DateTime.Now + "Handle Valid Submit";
+
     }
-    protected void HandleInValidSubmit()
+    void HandleInValidSubmit()
     {
         StatusClass = "alert-Danger";
         StatusMessage = DateTime.Now + "Handle InValid Submit";
