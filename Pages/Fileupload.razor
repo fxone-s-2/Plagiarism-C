@@ -8,7 +8,7 @@
 
 
 
-<h1>Checker</h1>
+
 <h2>Fileupload</h2>
  <br/>
 <RadzenButton Click=@(args=> OnClick("Orginal! ")) Text="Show Info Alert" Style="width:200px" ButtonStyle="ButtonStyle.Info" />
@@ -39,7 +39,8 @@
     <p> File type:@file.Type</p>
 }
 
-<button class="btn btn-primary" @onclick="NavigateToCounterComponent">Contact Us</button>
+
+<button class="btn btn-primary" @onclick="NavigateToContactComponent">Contact Us</button>
 
 
 @code {
@@ -51,7 +52,7 @@
         ButtonName = buttonName;
     }
 
-    private void NavigateToCounterComponent()
+    private void NavigateToContactComponent()
     {
         NavigationManager.NavigateTo("contactus");
     }
