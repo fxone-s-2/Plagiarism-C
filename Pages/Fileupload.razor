@@ -3,19 +3,14 @@
 @using Plagiarism_C.Service
 @inject IFileUpload fileUpload
 @inject NavigationManager NavigationManager
-
-
-
-
-
+@inject IToastService toastService
 
 <h2>Fileupload</h2>
  <br/>
-<RadzenButton Click=@(args=> OnClick("Orginal! ")) Text="Show Info Alert" Style="width:200px" ButtonStyle="ButtonStyle.Info" />
-<RadzenButton Click=@(args=> OnClick("Warning!")) Text="Show Info Alert" Style="width:200px" ButtonStyle="ButtonStyle.Warning"/>
-<RadzenButton Click=@(args=> OnClick("Cheating!")) Text="Show Info Alert" Style="width:200px" ButtonStyle="ButtonStyle.Danger"/>
 
-
+<button class="btn btn-info" @onclick="@(()=>toastService.ShowInfo("Original!"))"> Show Info Alert</button>
+<button class="btn btn-warning" @onclick="@(()=>toastService.ShowWarning("Warning!"))">Show Info Alert</button>
+<button class="btn btn-danger" @onclick="@(()=>toastService.ShowError("Cheating!"))"> Show Info Alert</button>
 <br />
 <p>@ButtonName</p>
 <textarea type="text" name="configJson" id="configJson" rows="10" cols="60" maxlength="300"
