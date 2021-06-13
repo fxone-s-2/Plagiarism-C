@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Plagiarism_C.Data;
 using Plagiarism_C.Service;
+using Microsoft.EntityFrameworkCore;
+using Plagiarism_C.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +35,8 @@ namespace Plagiarism_C
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<IFileUpload, FileUploaded>();
             services.AddBlazoredToast();
+            services.AddDbContext<PlagiarismContext>(opt =>
+            opt.UseInMemoryDatabase("PlagiarismList"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +60,7 @@ namespace Plagiarism_C
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
