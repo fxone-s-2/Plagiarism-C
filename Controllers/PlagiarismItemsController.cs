@@ -58,8 +58,6 @@ namespace Plagiarism_C.Controllers
                 return NotFound();
             }
 
-            plagiarismItem.Name = plagiarismItemDTO.Name;
-            plagiarismItem.Author = plagiarismItemDTO.Author;
             plagiarismItem.Text = plagiarismItemDTO.Text;
             plagiarismItem.Score = plagiarismItemDTO.Score;
 
@@ -81,8 +79,6 @@ namespace Plagiarism_C.Controllers
         {
             var plagiarismItem = new PlagiarismItem
             {
-                Name = plagiarismItemDTO.Name,
-                Author = plagiarismItemDTO.Author,
                 Text = plagiarismItemDTO.Text,
                 Score = plagiarismItemDTO.Score
             };
@@ -121,8 +117,6 @@ namespace Plagiarism_C.Controllers
         new PlagiarismItemDTO
         {
             Id = plagiarismItem.Id,
-            Name = plagiarismItem.Name,
-            Author = plagiarismItem.Author,
             Text = plagiarismItem.Text,
             Score = plagiarismItem.Score
         };
