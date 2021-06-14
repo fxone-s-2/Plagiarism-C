@@ -40,8 +40,8 @@ namespace Plagiarism_C
             services.AddBlazoredToast();
             services.AddHttpClient();
             services.AddScoped<HttpClient>();
-            services.AddDbContext<PlagiarismContext>(opt =>
-            opt.UseInMemoryDatabase("PlagiarismList"));
+            services.AddDbContext<DocumentContext>(opt =>
+            opt.UseInMemoryDatabase("DocumentList"));
 
             
         }
