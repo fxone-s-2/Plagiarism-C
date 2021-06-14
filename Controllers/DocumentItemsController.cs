@@ -45,9 +45,10 @@ namespace Plagiarism_C.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDocumentItem(Guid id, DocumentItem documentItem)
         {
-            if (id != documentItem.Id)
+            
+            if (id.CompareTo(documentItem.Id) != 0)
             {
-                return BadRequest();
+               return BadRequest();
             }
 
             _context.Entry(documentItem).State = EntityState.Modified;
