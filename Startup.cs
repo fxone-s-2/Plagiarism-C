@@ -14,6 +14,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Json;
+
 
 namespace Plagiarism_C
 {
@@ -35,8 +38,12 @@ namespace Plagiarism_C
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<IFileUpload, FileUploaded>();
             services.AddBlazoredToast();
+            services.AddHttpClient();
+            services.AddScoped<HttpClient>();
             services.AddDbContext<PlagiarismContext>(opt =>
             opt.UseInMemoryDatabase("PlagiarismList"));
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

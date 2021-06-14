@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http.Json;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
 
 namespace Plagiarism_C
 {
@@ -15,7 +19,22 @@ namespace Plagiarism_C
     {
         public static void Main(string[] args)
         {
+
             CreateHostBuilder(args).Build().Run();
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.Services.AddScoped(sp =>
+            new HttpClient
+            {
+            BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+            });
+
+
+
+
+
+
+
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -24,5 +43,6 @@ namespace Plagiarism_C
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+       
     }
 }

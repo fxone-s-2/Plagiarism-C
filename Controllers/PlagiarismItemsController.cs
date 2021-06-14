@@ -31,7 +31,7 @@ namespace Plagiarism_C.Controllers
 
         // GET: api/PlagiarismItems/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<PlagiarismItemDTO>> GetPlagiarismItem(long id)
+        public async Task<ActionResult<PlagiarismItemDTO>> GetPlagiarismItem(Guid id)
         {
             var plagiarismItem = await _context.PlagiarismItems.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace Plagiarism_C.Controllers
 
         // PUT: api/PlagiarismItems/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlagiarismItem(long id, PlagiarismItemDTO plagiarismItemDTO)
+        public async Task<IActionResult> PutPlagiarismItem(Guid id, PlagiarismItemDTO plagiarismItemDTO)
         {
             if (id != plagiarismItemDTO.Id)
             {
@@ -94,7 +94,7 @@ namespace Plagiarism_C.Controllers
 
         // DELETE: api/PlagiarismItems/{id}
         [HttpDelete("{id}")]
-        public async Task<ActionResult<PlagiarismItem>> DeletePlagiarismItem(long id)
+        public async Task<ActionResult<PlagiarismItem>> DeletePlagiarismItem(Guid id)
         {
             var plagiarismItem = await _context.PlagiarismItems.FindAsync(id);
             if (plagiarismItem == null)
@@ -108,7 +108,7 @@ namespace Plagiarism_C.Controllers
             return NoContent();
         }
 
-        private bool PlagiarismItemExists(long id)
+        private bool PlagiarismItemExists(Guid id)
         {
             return _context.PlagiarismItems.Any(e => e.Id == id);
         }

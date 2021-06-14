@@ -4,16 +4,24 @@
 @inject IFileUpload fileUpload
 @inject NavigationManager NavigationManager
 @inject IToastService toastService
+@using System.Net.Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+@inject HttpClient Http
+@using Plagiarism_C.Controllers
+@using Models
+
 
 <h2>Fileupload</h2>
- <br/>
+<br />
 
 <button class="btn btn-info" @onclick="@(()=>toastService.ShowInfo("Original!"))"> Show Info Alert</button>
 <button class="btn btn-warning" @onclick="@(()=>toastService.ShowWarning("Warning!"))">Show Info Alert</button>
 <button class="btn btn-danger" @onclick="@(()=>toastService.ShowError("Cheating!"))"> Show Info Alert</button>
 <br />
-<p>@ButtonName</p>
-<textarea type="text" name="configJson" id="configJson" rows="10" cols="60" maxlength="300"
+
+
+<textarea @bind="newItem" placeholder="empty" type="text" name="configJson" id="configJson" rows="10" cols="60" maxlength="300"
           οnchange="this.value=this.value.substring(0, 300)"
           οnkeydοwn="this.value=this.value.substring(0,300)"
           οnkeyup="this.value=this.value.substring(0, 300)">
@@ -22,7 +30,7 @@
 
 
 <div class="form-group">
-    <button type="submit" class="btn btn-success">Result</button>
+    <button @onclick="AddItem" type="submit" class="btn btn-success">Result</button>
 </div>
 
 <InputFile OnChange="HandleFileSelected"></InputFile>
@@ -38,14 +46,24 @@
 <button class="btn btn-primary" @onclick="NavigateToContactComponent">Contact Us</button>
 
 
-@code {
-    
-    public string ButtonName;
-    void OnClick(string buttonName)
-    {
+<p>@docID</p>
+<p> @docText</p>
 
-        ButtonName = buttonName;
-    }
+
+@code {
+
+    public string ButtonName;
+    private string newItem;
+    private Guid docID;
+    private string docText;
+    private PlagiarismItem[] plagItems;
+    private PlagiarismItemsController pc;
+    private PlagiarismItemDTO list = new PlagiarismItemDTO();
+
+
+    protected override async Task OnInitializedAsync() => await GetPlagItems();
+    protected async Task GetPlagItems() => plagItems = await Http.GetFromJsonAsync<Models.PlagiarismItem[]>("https://localhost:44388/api/PlagiarismItems");
+
 
     private void NavigateToContactComponent()
     {
@@ -68,6 +86,28 @@
             await fileUpload.UploadAsync(file);
         }
     }
+
+    private async Task AddItem()
+    {
+
+        Guid id = Guid.NewGuid();
+
+
+        var addItem = new Models.PlagiarismItem {Id = id , Text = newItem };
+        await Http.PostAsJsonAsync("https://localhost:44388/api/PlagiarismItems", addItem);
+
+    }
+
+    private async Task ShowDocument(Guid id)
+    {
+        
+        
+        //list = pc.GetPlagiarismItem(id); 
+    }
+
+
+
+
 
 
 }
