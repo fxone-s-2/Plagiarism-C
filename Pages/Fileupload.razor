@@ -10,6 +10,7 @@
 @inject HttpClient Http
 @using Controllers
 @using Models
+@using System.Linq
 
 
 <h2>Fileupload</h2>
@@ -31,6 +32,7 @@
 
 <div class="form-group">
     <button @onclick="AddItem" type="submit" class="btn btn-success">Result</button>
+    <button @onclick="ShowDocument" type="submit" class="btn btn-success">Result</button>
 </div>
 
 <InputFile OnChange="HandleFileSelected"></InputFile>
@@ -56,13 +58,14 @@
     private string newItem;
     private Guid docID;
     private string docText;
-    private DocumentItem[] plagItems;
+    private DocumentItem[] documentItems;
+    private DocumentItem documentItem;
     private DocumentItemsController pc;
     private DocumentItem list = new DocumentItem();
 
 
     protected override async Task OnInitializedAsync() => await GetPlagItems();
-    protected async Task GetPlagItems() => plagItems = await Http.GetFromJsonAsync<Models.DocumentItem[]>("https://localhost:44388/api/DocumentItems");
+    protected async Task GetPlagItems() => documentItems = await Http.GetFromJsonAsync<Models.DocumentItem[]>("https://localhost:44388/api/DocumentItems");
 
 
     private void NavigateToContactComponent()
@@ -92,17 +95,36 @@
 
         Guid id = Guid.NewGuid();
 
+        docID = id;
 
-        var addItem = new Models.DocumentItem {Id = id , Text = newItem };
+
+        var addItem = new Models.DocumentItem { Id = id, Text = newItem };
         await Http.PostAsJsonAsync("https://localhost:44388/api/DocumentItems", addItem);
 
     }
-
-    private async Task ShowDocument(Guid id)
+    public DocumentItem GetDocumentItem(Guid id)
     {
 
+        var docList = documentItems;
 
-        //list = pc.GetDocumentItem(id); 
+        var docItem = docList.Where(item => item.Id == id).FirstOrDefault();
+
+        return docItem;
+
+
+    }
+
+    private async Task ShowDocument()
+    {
+
+        await GetPlagItems();
+
+
+
+        docText = GetDocumentItem(docID).Text;
+
+
+
     }
 
 
