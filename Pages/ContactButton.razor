@@ -1,0 +1,20 @@
+﻿
+@page "/ContactButton"
+@using Plagiarism_C.Service
+@inject NavigationManager NavigationManager
+
+<button class="btn btn-primary" @onclick="NavigateToContactComponent">Contact Us</button>
+
+
+
+@code {
+
+    
+    private void NavigateToContactComponent()
+    {
+        NavigationManager.NavigateTo("contactus");
+    }
+
+   
+
+}

@@ -1,16 +1,50 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
 <div class="main">
     <div class="top-row px-4">
+        <div align="left">
+            <button class="btn btn-primary" @onclick="NavigateToHome">Home</button>
+            <button class="btn btn-primary" @onclick="NavigateToContactComponent">Contact Us</button>
+        </div>
         <h1>CHECKER</h1>
     </div>
-
+    <br />
     <div class="content px-4">
         @Body
     </div>
+    <br />
+    <br />
+    <br />
+    <div class="bottom-row px-4">
+        <button class="btn btn-primary" @onclick="NavigateToHome">Home</button>
+        <button class="btn btn-primary" @onclick="NavigateToContactComponent">Contact Us</button>
+    </div>
+
 </div>
 
-<BlazoredToasts/>
+<BlazoredToasts />
+
+
+@code {
+
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("fileupload");
+    }
+
+    private void NavigateToContactComponent()
+    {
+        NavigationManager.NavigateTo("contactus");
+    }
+
+
+}
+
+
+
+
+
 
 
 
