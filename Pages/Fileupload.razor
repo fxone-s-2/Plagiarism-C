@@ -12,44 +12,51 @@
 @using Models
 @using System.Linq
 
+<div align="center">
+    <h2>Fileupload</h2>
+    <br />
 
-<h2>Fileupload</h2>
-<br />
+    <div>
+        <button class="btn btn-info" @onclick="@(()=>toastService.ShowInfo("Original!"))"> Show Info Alert</button>
+        <button class="btn btn-warning" @onclick="@(()=>toastService.ShowWarning("Warning!"))">Show Info Alert</button>
+        <button class="btn btn-danger" @onclick="@(()=>toastService.ShowError("Cheating!"))"> Show Info Alert</button>
+    </div>
+    <br />
 
-<button class="btn btn-info" @onclick="@(()=>toastService.ShowInfo("Original!"))"> Show Info Alert</button>
-<button class="btn btn-warning" @onclick="@(()=>toastService.ShowWarning("Warning!"))">Show Info Alert</button>
-<button class="btn btn-danger" @onclick="@(()=>toastService.ShowError("Cheating!"))"> Show Info Alert</button>
-<br />
 
-
-<textarea @bind="newItem" placeholder="empty" type="text" name="configJson" id="configJson" rows="10" cols="60" maxlength="300"
+    <div>
+<textarea @bind="newItem" placeholder="Enter Text Here:" type="text" name="configJson" id="configJson" rows="10" cols="60" maxlength="300"
           οnchange="this.value=this.value.substring(0, 300)"
           οnkeydοwn="this.value=this.value.substring(0,300)"
-          οnkeyup="this.value=this.value.substring(0, 300)">
-  @Text
-</textarea>
+          οnkeyup="this.value=this.value.substring(0, 300)">@Text</textarea>
+    </div>
 
 
-<div class="form-group">
-    <button @onclick="AddItem" type="submit" class="btn btn-success">Result</button>
-    <button @onclick="ShowDocument" type="submit" class="btn btn-success">Result</button>
+    <div class="form-group">
+        <button @onclick="AddItem" type="submit" class="btn btn-success">Result</button>
+        <button @onclick="ShowDocument" type="submit" class="btn btn-success">Show Test</button>
+    </div>
+
+    <InputFile OnChange="HandleFileSelected"></InputFile>
+
+    @if (file != null)
+    {
+        <p> Name:@file.Name</p>
+        <p> Size in Bytes: @file.Size</p>
+        <p> File type:@file.Type</p>
+    }
+
+
+
+
+
+    <p>@docIDdisplay</p>
+
+    <p> @docText</p>
+
+
 </div>
 
-<InputFile OnChange="HandleFileSelected"></InputFile>
-
-@if (file != null)
-{
-    <p> Name:@file.Name</p>
-    <p> Size in Bytes: @file.Size</p>
-    <p> File type:@file.Type</p>
-}
-
-
-<button class="btn btn-primary" @onclick="NavigateToContactComponent">Contact Us</button>
-
-
-<p>@docID</p>
-<p> @docText</p>
 
 
 @code {
@@ -57,6 +64,7 @@
     public string ButtonName;
     private string newItem;
     private Guid docID;
+    private string docIDdisplay;
     private string docText;
     private DocumentItem[] documentItems;
     private DocumentItem documentItem;
@@ -95,11 +103,15 @@
 
         Guid id = Guid.NewGuid();
 
-        docID = id;
+
 
 
         var addItem = new Models.DocumentItem { Id = id, Text = newItem };
         await Http.PostAsJsonAsync("https://localhost:44388/api/DocumentItems", addItem);
+
+        docID = id;
+
+        await ShowDocument();
 
     }
     public DocumentItem GetDocumentItem(Guid id)
@@ -123,13 +135,14 @@
 
         docText = GetDocumentItem(docID).Text;
 
+        Guid Holder = GetDocumentItem(docID).Id;
+
+        docIDdisplay = Holder.ToString();
+
+
+
 
 
     }
-
-
-
-
-
 
 }
