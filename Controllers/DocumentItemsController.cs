@@ -24,21 +24,33 @@ namespace Plagiarism_C.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DocumentItem>>> GetDocumentItems()
         {
-            return await _context.DocumentItems.ToListAsync();
+            try
+            {
+                var documentItem = await _context.DocumentItems.ToListAsync();
+                return Ok(documentItem);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Something went wrong: {ex}");
+                return StatusCode(500, "Internal server error");
+            }
+
         }
 
         // GET: api/DocumentItems/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<DocumentItem>> GetDocumentItem(Guid id)
         {
-            var documentItem = await _context.DocumentItems.FindAsync(id);
-
-            if (documentItem == null)
+            try
             {
+                var documentItem = await _context.DocumentItems.FindAsync(id);
+                return Ok(documentItem);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Something went wrong: {ex}");
                 return NotFound();
             }
-
-            return documentItem;
         }
 
         // PUT: api/DocumentItems/{id}
@@ -57,10 +69,11 @@ namespace Plagiarism_C.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!DocumentItemExists(id))
                 {
+                    Console.WriteLine($"Something went wrong: {ex}");
                     return NotFound();
                 }
                 else
@@ -76,10 +89,17 @@ namespace Plagiarism_C.Controllers
         [HttpPost]
         public async Task<ActionResult<DocumentItem>> PostDocumentItem(DocumentItem documentItem)
         {
-            _context.DocumentItems.Add(documentItem);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetDocumentItem), new { id = documentItem.Id }, documentItem);
+            try
+            {
+                _context.DocumentItems.Add(documentItem);
+                await _context.SaveChangesAsync();
+                return Ok(CreatedAtAction(nameof(GetDocumentItem), new { id = documentItem.Id }, documentItem));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Something went wrong: {ex}");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // DELETE: api/DocumentItems/{id}
@@ -89,6 +109,7 @@ namespace Plagiarism_C.Controllers
             var documentItem = await _context.DocumentItems.FindAsync(id);
             if (documentItem == null)
             {
+                Console.WriteLine($"Something went wrong: Obj is null");
                 return NotFound();
             }
 
