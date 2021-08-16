@@ -1,6 +1,7 @@
 ﻿
 @page "/fileupload"
 @using Plagiarism_C.Service
+@using Plagiarism_C.Data
 @inject IFileUpload fileUpload
 @inject NavigationManager NavigationManager
 @inject IToastService toastService
@@ -11,12 +12,24 @@
 @using Controllers
 @using Models
 @using System.Linq
+@using Json.Net
+@using System;
+@using System.IO;
+@using System.Text.Json;
+@using Microsoft.VisualBasic.FileIO;
+@using System.Collections;
+@using System.Collections.Generic;
+
 
 <div align="center">
     <h2>Fileupload</h2>
     <br />
+    <div>
+        <button class="btn btn-info" @onclick="@(()=>toastService.ShowInfo("Original!"))"> Show Info Alert</button>
+        <button class="btn btn-warning" @onclick="@(()=>toastService.ShowWarning("Warning!"))">Show Info Alert</button>
+        <button class="btn btn-danger" @onclick="@(()=>toastService.ShowError("Cheating!"))"> Show Info Alert</button>
+    </div>
 
-   
     <br />
 
 
@@ -31,16 +44,10 @@
     <div class="form-group">
         <button @onclick="AddItem" type="submit" class="btn btn-success">Result</button>
         <button @onclick="ShowDocument" type="submit" class="btn btn-success">Show Test</button>
+        
     </div>
 
-    <InputFile OnChange="HandleFileSelected"></InputFile>
-
-    @if (file != null)
-    {
-        <p> Name:@file.Name</p>
-        <p> Size in Bytes: @file.Size</p>
-        <p> File type:@file.Type</p>
-    }
+    
 
 
 
@@ -66,10 +73,23 @@
     private DocumentItem documentItem;
     private DocumentItemsController pc;
     private DocumentItem list = new DocumentItem();
+    ArrayList compare;
+
+
+
 
 
     protected override async Task OnInitializedAsync() => await GetPlagItems();
     protected async Task GetPlagItems() => documentItems = await Http.GetFromJsonAsync<Models.DocumentItem[]>("https://localhost:44388/api/DocumentItems");
+
+
+
+
+
+
+
+
+
 
 
     private void NavigateToContactComponent()
@@ -99,6 +119,8 @@
 
         Guid id = Guid.NewGuid();
 
+        compare = shakeConvert.getArray();
+
 
         var addItem = new Models.DocumentItem { Id = id, Text = newItem };
         await Http.PostAsJsonAsync("https://localhost:44388/api/DocumentItems", addItem);
@@ -127,7 +149,7 @@
 
 
 
-        docText = GetDocumentItem(docID).Text;
+        docText = compare.ToString();
 
         Guid Holder = GetDocumentItem(docID).Id;
 
