@@ -6,7 +6,7 @@ namespace Plagiarism_C.Models
     {
         public Guid Id { get; set; }
         public string Text { get; set; }
-        public int Score { get; set; }
+        public double Score { get; set; }
     }
 
    // Over-Posting

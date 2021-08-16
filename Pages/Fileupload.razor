@@ -56,6 +56,8 @@
     <p>@docIDdisplay</p>
 
     <p> @docText</p>
+    
+    <p> @docScore</p>
 
 
 </div>
@@ -127,11 +129,15 @@
         }
 
         var item = new Models.DocumentItem { Id = id, Text = changedItem };
+
         await Http.PostAsJsonAsync("https://localhost:44388/api/DocumentItems", item);
+
+        item = DocumentItemsController.GetScore(item, compare);
 
         docID = id;
 
-        DocumentItemsController.getScore(item, compare);
+        await Http.PutAsJsonAsync("https://localhost:44388/api/DocumentItems/" + docID, item);
+
 
 
         await ShowDocument();

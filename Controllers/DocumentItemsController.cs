@@ -126,7 +126,7 @@ namespace Plagiarism_C.Controllers
             return _context.DocumentItems.Any(e => e.Id == id);
         }
 
-        public static DocumentItem getScore(DocumentItem source, ArrayList library)
+        public static DocumentItem GetScore(DocumentItem source, ArrayList library)
         {
             var textArray = source.Text.Split('.');
             string[] libArray = (string[])library.ToArray(typeof(string));
@@ -134,30 +134,33 @@ namespace Plagiarism_C.Controllers
 
             // Declarations
             // Setting the scene
-            int score = textArray.Count();
+            double score = textArray.Count();
 
 
             // Getting score
             for (int index = 0; index < textArray.Count(); index++)
             {
-                score += rollingHash(textArray[index], libArray);
+                Console.WriteLine(index);
+                score += RollingHash(textArray[index], libArray);
+                
             }
 
 
-            source.Score = (score / textArray.Count() * 100) % 100;
+            source.Score = score / Convert.ToDouble(textArray.Count());
             return source;
         }
 
         //Hashes all the things and returns equality counts
-        private static int rollingHash(string txt, string[] lib)
+        private static int RollingHash(string txt, string[] lib)
         {
             int score = 0;
-            lib = hashArray(lib);
+            lib = HashArray(lib);
             foreach (string s in lib)
             {
-                if (hashCompare(txt, s))
+                if (HashCompare(txt, s))
                 {
                     score++;
+                    
                 }
             }
 
@@ -166,21 +169,24 @@ namespace Plagiarism_C.Controllers
 
 
         //Compares two hashed strings
-        private static bool hashCompare(string txt, string lib)
+        private static bool HashCompare(string txt, string lib)
         {
-            var hash1 = hashFunction(txt);
+            var hash1 = HashFunction(txt);
             if (hash1 == lib)
             {
+                Console.WriteLine(txt);
+                
                 return true;
             }
             else
             {
+                
                 return false;
             }
         }
 
         //Hashes the string
-        private static string hashFunction(string txt)
+        private static string HashFunction(string txt)
         {
             string[] array = txt.Split(' ');
             int SizeCounter = array.Count();
@@ -203,11 +209,11 @@ namespace Plagiarism_C.Controllers
         }
 
         // Hashes whole library
-        public static string[] hashArray(string[] lib)
+        public static string[] HashArray(string[] lib)
         {
             for (int index = 0; index < lib.Count(); index++)
             {
-                lib[index] = hashFunction(lib[index]).ToString();
+                lib[index] = HashFunction(lib[index]).ToString();
             }
             return lib;
         }
