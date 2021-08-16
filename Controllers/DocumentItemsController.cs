@@ -126,7 +126,7 @@ namespace Plagiarism_C.Controllers
             return _context.DocumentItems.Any(e => e.Id == id);
         }
 
-        public DocumentItem getScore(DocumentItem source, ArrayList library)
+        public static DocumentItem getScore(DocumentItem source, ArrayList library)
         {
             var textArray = source.Text.Split('.');
             string[] libArray = (string[])library.ToArray(typeof(string));
@@ -149,7 +149,7 @@ namespace Plagiarism_C.Controllers
         }
 
         //Hashes all the things and returns equality counts
-        private int rollingHash(string txt, string[] lib)
+        private static int rollingHash(string txt, string[] lib)
         {
             int score = 0;
             lib = hashArray(lib);
@@ -166,7 +166,7 @@ namespace Plagiarism_C.Controllers
 
 
         //Compares two hashed strings
-        private bool hashCompare(string txt, string lib)
+        private static bool hashCompare(string txt, string lib)
         {
             var hash1 = hashFunction(txt);
             if (hash1 == lib)
@@ -180,7 +180,7 @@ namespace Plagiarism_C.Controllers
         }
 
         //Hashes the string
-        private string hashFunction(string txt)
+        private static string hashFunction(string txt)
         {
             string[] array = txt.Split(' ');
             int SizeCounter = array.Count();
@@ -203,7 +203,7 @@ namespace Plagiarism_C.Controllers
         }
 
         // Hashes whole library
-        public string[] hashArray(string[] lib)
+        public static string[] hashArray(string[] lib)
         {
             for (int index = 0; index < lib.Count(); index++)
             {

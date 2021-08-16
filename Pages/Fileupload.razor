@@ -126,12 +126,12 @@
             changedItem = changedItem.Replace(c, string.Empty);
         }
 
-        var addItem = new Models.DocumentItem { Id = id, Text = changedItem };
-        await Http.PostAsJsonAsync("https://localhost:44388/api/DocumentItems", addItem);
+        var item = new Models.DocumentItem { Id = id, Text = changedItem };
+        await Http.PostAsJsonAsync("https://localhost:44388/api/DocumentItems", item);
 
         docID = id;
 
-        DocumentItemsController.getScore(addItem, compare);
+        DocumentItemsController.getScore(item, compare);
 
 
         await ShowDocument();
