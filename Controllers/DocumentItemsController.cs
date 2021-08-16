@@ -134,19 +134,18 @@ namespace Plagiarism_C.Controllers
 
             // Declarations
             // Setting the scene
-            double score = textArray.Count();
-
+            double score = 0.0;
+            libArray = HashArray(libArray);
 
             // Getting score
             for (int index = 0; index < textArray.Count(); index++)
             {
-                Console.WriteLine(index);
                 score += RollingHash(textArray[index], libArray);
-                
+                Console.WriteLine(score);
             }
 
 
-            source.Score = score / Convert.ToDouble(textArray.Count());
+            source.Score = (score - 1) / Convert.ToDouble(textArray.Count()) * 100;
             return source;
         }
 
@@ -154,13 +153,11 @@ namespace Plagiarism_C.Controllers
         private static int RollingHash(string txt, string[] lib)
         {
             int score = 0;
-            lib = HashArray(lib);
-            foreach (string s in lib)
+            for (int index = 0; index < lib.Count(); index++)
             {
-                if (HashCompare(txt, s))
+                if (HashCompare(txt, lib[index]))
                 {
                     score++;
-                    
                 }
             }
 
@@ -175,12 +172,10 @@ namespace Plagiarism_C.Controllers
             if (hash1 == lib)
             {
                 Console.WriteLine(txt);
-                
                 return true;
             }
             else
             {
-                
                 return false;
             }
         }
@@ -190,7 +185,7 @@ namespace Plagiarism_C.Controllers
         {
             string[] array = txt.Split(' ');
             int SizeCounter = array.Count();
-            int hashValue = 0;
+            long hashValue = 0;
             foreach (string s in array)
             {
                 byte[] uniBytes = Encoding.Unicode.GetBytes(s);
@@ -201,7 +196,7 @@ namespace Plagiarism_C.Controllers
                     valueToHash += Convert.ToInt32(b.ToString());
                 }
 
-                hashValue += valueToHash * SizeCounter;
+                hashValue += Convert.ToInt64(valueToHash * Math.Pow(SizeCounter, 2));
                 SizeCounter--;
             }
 

@@ -25,19 +25,17 @@
     <h2>Fileupload</h2>
     <br />
     <div>
-        <button class="btn btn-info" @onclick="@(()=>toastService.ShowInfo("Original!"))"> Show Info Alert</button>
-        <button class="btn btn-warning" @onclick="@(()=>toastService.ShowWarning("Warning!"))">Show Info Alert</button>
-        <button class="btn btn-danger" @onclick="@(()=>toastService.ShowError("Cheating!"))"> Show Info Alert</button>
+           <p>@message</p>
     </div>
 
     <br />
 
 
     <div>
-<textarea @bind="newItem" placeholder="Enter Text Here:" type="text" name="configJson" id="configJson" rows="10" cols="60" maxlength="300"
-          οnchange="this.value=this.value.substring(0, 300)"
-          οnkeydοwn="this.value=this.value.substring(0,300)"
-          οnkeyup="this.value=this.value.substring(0, 300)">@Text</textarea>
+<textarea @bind="newItem" placeholder="Enter Text Here:" type="text" name="configJson" id="configJson" rows="10" cols="60" maxlength="30000"
+          οnchange="this.value=this.value.substring(0, 3000)"
+          οnkeydοwn="this.value=this.value.substring(0,3000)"
+          οnkeyup="this.value=this.value.substring(0, 3000)">@Text</textarea>
     </div>
 
 
@@ -78,6 +76,7 @@
     private DocumentItemsController pc;
     private DocumentItem list = new DocumentItem();
     ArrayList compare;
+    private string message = "Please enter your essay below.";
 
 
 
@@ -139,8 +138,24 @@
         await Http.PutAsJsonAsync("https://localhost:44388/api/DocumentItems/" + docID, item);
 
 
+        if (item.Score < 10 )
+        {
+            message = "Definitly Not Plagiarized";
 
-        await ShowDocument();
+        }
+        else if (item.Score < 30 && item.Score > 10)
+        {
+            message = "May be Plagiarized!";
+
+        }
+        else
+        {
+            message = "High Probability of Plagiarism!";
+        }
+
+
+
+    
 
     }
     public DocumentItem GetDocumentItem(Guid id)
