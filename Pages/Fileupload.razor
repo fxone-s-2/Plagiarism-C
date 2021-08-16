@@ -16,11 +16,7 @@
     <h2>Fileupload</h2>
     <br />
 
-    <div>
-        <button class="btn btn-info" @onclick="@(()=>toastService.ShowInfo("Original!"))"> Show Info Alert</button>
-        <button class="btn btn-warning" @onclick="@(()=>toastService.ShowWarning("Warning!"))">Show Info Alert</button>
-        <button class="btn btn-danger" @onclick="@(()=>toastService.ShowError("Cheating!"))"> Show Info Alert</button>
-    </div>
+   
     <br />
 
 
@@ -102,8 +98,6 @@
     {
 
         Guid id = Guid.NewGuid();
-
-
 
 
         var addItem = new Models.DocumentItem { Id = id, Text = newItem };
