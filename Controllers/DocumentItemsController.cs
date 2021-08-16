@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Plagiarism_C.Models;
+using System.Collections;
+using System.Text;
 
 namespace Plagiarism_C.Controllers
 {
@@ -122,6 +124,92 @@ namespace Plagiarism_C.Controllers
         private bool DocumentItemExists(Guid id)
         {
             return _context.DocumentItems.Any(e => e.Id == id);
+        }
+
+        public DocumentItem getScore(DocumentItem source, ArrayList library)
+        {
+            var textArray = source.Text.Split('.');
+            string[] libArray = (string[])library.ToArray(typeof(string));
+
+
+            // Declarations
+            // Setting the scene
+            int score = textArray.Count();
+
+
+            // Getting score
+            for (int index = 0; index < textArray.Count(); index++)
+            {
+                score += rollingHash(textArray[index], libArray);
+            }
+
+
+            source.Score = (score / textArray.Count() * 100) % 100;
+            return source;
+        }
+
+        //Hashes all the things and returns equality counts
+        private int rollingHash(string txt, string[] lib)
+        {
+            int score = 0;
+            lib = hashArray(lib);
+            foreach (string s in lib)
+            {
+                if (hashCompare(txt, s))
+                {
+                    score++;
+                }
+            }
+
+            return score;
+        }
+
+
+        //Compares two hashed strings
+        private bool hashCompare(string txt, string lib)
+        {
+            var hash1 = hashFunction(txt);
+            if (hash1 == lib)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //Hashes the string
+        private string hashFunction(string txt)
+        {
+            string[] array = txt.Split(' ');
+            int SizeCounter = array.Count();
+            int hashValue = 0;
+            foreach (string s in array)
+            {
+                byte[] uniBytes = Encoding.Unicode.GetBytes(s);
+                int valueToHash = 0;
+
+                foreach (byte b in uniBytes)
+                {
+                    valueToHash += Convert.ToInt32(b.ToString());
+                }
+
+                hashValue += valueToHash * SizeCounter;
+                SizeCounter--;
+            }
+
+            return hashValue.ToString();
+        }
+
+        // Hashes whole library
+        public string[] hashArray(string[] lib)
+        {
+            for (int index = 0; index < lib.Count(); index++)
+            {
+                lib[index] = hashFunction(lib[index]).ToString();
+            }
+            return lib;
         }
     }
 }

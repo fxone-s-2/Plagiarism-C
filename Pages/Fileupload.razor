@@ -69,6 +69,7 @@
     private Guid docID;
     private string docIDdisplay;
     private string docText;
+    private string docScore;
     private DocumentItem[] documentItems;
     private DocumentItem documentItem;
     private DocumentItemsController pc;
@@ -81,13 +82,6 @@
 
     protected override async Task OnInitializedAsync() => await GetPlagItems();
     protected async Task GetPlagItems() => documentItems = await Http.GetFromJsonAsync<Models.DocumentItem[]>("https://localhost:44388/api/DocumentItems");
-
-
-
-
-
-
-
 
 
 
@@ -127,6 +121,9 @@
 
         docID = id;
 
+        DocumentItemsController.getScore(addItem, compare);
+
+
         await ShowDocument();
 
     }
@@ -149,7 +146,8 @@
 
 
 
-        docText = compare.ToString();
+        docScore = GetDocumentItem(docID).Score.ToString();
+        docText = GetDocumentItem(docID).Text;
 
         Guid Holder = GetDocumentItem(docID).Id;
 
