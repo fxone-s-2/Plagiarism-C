@@ -66,6 +66,7 @@
 
     public string ButtonName;
     private string newItem;
+    private string changedItem;
     private Guid docID;
     private string docIDdisplay;
     private string docText;
@@ -115,8 +116,17 @@
 
         compare = shakeConvert.getArray();
 
+        changedItem = newItem;
 
-        var addItem = new Models.DocumentItem { Id = id, Text = newItem };
+        string[] charsToRemove = new string[]
+        {"@", ",", ";", "'", "(", ")", "-", "[", "]", "{", "}", ";", ":", "<", ">", "?", "#", "$", "%", "^",  "&",  "*", "_", "~", "\""};
+
+        foreach (var c in charsToRemove)
+        {
+            changedItem = changedItem.Replace(c, string.Empty);
+        }
+
+        var addItem = new Models.DocumentItem { Id = id, Text = changedItem };
         await Http.PostAsJsonAsync("https://localhost:44388/api/DocumentItems", addItem);
 
         docID = id;
