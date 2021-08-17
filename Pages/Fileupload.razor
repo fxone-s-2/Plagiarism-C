@@ -41,7 +41,7 @@
 
     <div class="form-group">
         <button @onclick="AddItem" type="submit" class="btn btn-success">Result</button>
-        <button @onclick="ShowDocument" type="submit" class="btn btn-success">Show Test</button>
+       
         
     </div>
 
@@ -117,13 +117,21 @@
 
         compare = shakeConvert.getArray();
 
+
+
         changedItem = newItem;
 
+        if (changedItem == null)
+        {
+            changedItem = "No Text Entered";
+        }
+
         string[] charsToRemove = new string[]
-        {"@", ",", ";", "'", "(", ")", "-", "[", "]", "{", "}", ";", ":", "<", ">", "?", "#", "$", "%", "^",  "&",  "*", "_", "~", "\""};
+    {"@", ",", ";", "'", "(", ")", "-", "[", "]", "{", "}", ";", ":", "<", ">", "?", "#", "$", "%", "^",  "&",  "*", "_", "~", "\""};
 
         foreach (var c in charsToRemove)
         {
+
             changedItem = changedItem.Replace(c, string.Empty);
         }
 
@@ -148,14 +156,15 @@
             message = "May be Plagiarized!";
 
         }
-        else
+        else 
         {
             message = "High Probability of Plagiarism!";
         }
+        
 
 
 
-    
+
 
     }
     public DocumentItem GetDocumentItem(Guid id)
